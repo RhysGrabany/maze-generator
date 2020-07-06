@@ -2,18 +2,14 @@
 import tkinter as tk
 from classes.window import Window
 from classes.grid import Grid
-from rec_back import solve
+from rec_back import create
 
 
 def main():
-    #root = tk.Tk()
-    #window = Window(master=root)
-    #window.create_window()
-    #window.mainloop()
-    #window.buttons_main(window)
+    root = tk.Tk()
+    main = Window(master=root)
+    main.mainloop()
 
-    grid = Grid(10, 10)
-    solve(grid)
 
 
 
