@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from PIL import Image, ImageOps
 
 class Grid():
     ###############
@@ -8,7 +9,10 @@ class Grid():
     def __init__(self, rows, cols):
         self.m_Rows = rows
         self.m_Cols = cols
+        
         self.m_Grid = []
+        self.m_MazeImage = Image.new("RGB", (self.m_Rows+3, self.m_Cols+3), "#ffffff")
+
 
         self.fill()
     
@@ -27,6 +31,8 @@ class Grid():
         return self.m_Cols
     def __getitem__(self, key):
         return self.m_Grid[key]
+    def getMazeImage(self):
+        return self.m_MazeImage
 
 
     def __len__(self):
@@ -48,9 +54,29 @@ class Grid():
             _ = []
             for x in range(0, self.m_Cols+1):
                 _.append(self.m_Grid[y][x].getElement())
-            print("".join(_))
+            print(str(y) + "".join(_))
         print("\n")
+    
+    def make_image(self):
+        im = self.m_MazeImage
+        pixels= im.load()
 
+        print(self.m_Rows)
+
+
+        for y in range(0, self.m_Rows+1):
+            for x in range(0, self.m_Cols+1):
+                if self.m_Grid[y][x].getElement() == '#':
+                    pixels[y+1,x+1] = (0, 0, 0)
+                elif self.m_Grid[y][x].getElement() == ' ':
+                    pixels[y+1, x+1] = (255, 255, 255)
+
+        rotated = im.transpose(Image.ROTATE_270)
+        flip = ImageOps.mirror(rotated)
+        self.m_MazeImage = flip
+    
+    def save_image(self, path):
+        self.m_MazeImage.save(path)
 
 class Cell():
 

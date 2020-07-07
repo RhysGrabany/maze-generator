@@ -2,13 +2,18 @@
 import tkinter as tk
 from classes.window import Window, MainMenu, MazeCreation
 from classes.grid import Grid
-from rec_back import create
-
+from generator.rec_back import create
 
 def main():
-    root = tk.Tk()
-    main = MainMenu(master=root)
-    main.mainloop()
+    #root = tk.Tk()
+    #main = MazeCreation(master=root)
+    #main.mainloop()
+
+    grid = Grid(40, 40)
+    create(grid)
+    grid.make_image()
+    grid.print()
+    grid.save_image("test.png")
 
 
 
