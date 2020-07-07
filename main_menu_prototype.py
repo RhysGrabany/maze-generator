@@ -63,8 +63,7 @@ def view_mazes():
     print(messages("choose_maze"))
     bank.print()
 
-    num_of_mazes = len([x for x in bank.getStack() if x is not None])
-    print(num_of_mazes)
+    
     
 
 
