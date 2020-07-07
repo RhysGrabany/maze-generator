@@ -1,17 +1,19 @@
 #!/usr/bin/python3
 
 from PIL import Image, ImageOps
+from datetime import datetime
 
-class Grid():
+class Maze():
     ###############
     # CONSTRUCTOR #
     ###############
-    def __init__(self, rows, cols):
-        self.m_Rows = rows
+    def __init__(self, cols, rows):
         self.m_Cols = cols
+        self.m_Rows = rows
         
-        self.m_Grid = []
+        self.m_Maze = []
         self.m_MazeImage = Image.new("RGB", (self.m_Rows+3, self.m_Cols+3), "#ffffff")
+        self.m_Name = "MAZE_" + str(cols) + "x" + str(rows)
 
 
         self.fill()
@@ -20,7 +22,7 @@ class Grid():
     # DESTRUCTOR #
     ##############
     def __del__(self):
-        del self.m_Grid
+        del self.m_Maze
 
     ###########
     # GETTERS #
@@ -30,14 +32,21 @@ class Grid():
     def getCols(self):
         return self.m_Cols
     def __getitem__(self, key):
-        return self.m_Grid[key]
+        return self.m_Maze[key]
     def getMazeImage(self):
         return self.m_MazeImage
+    def getName(self):
+        return self.m_Name
+
+    ###########
+    # SETTERS #
+    ###########
+    def setName(self, name):
+        self.m_Name = name
 
 
     def __len__(self):
-        return len(self.m_Grid)
-
+        return len(self.m_Maze)
 
     ###########
     # METHODS #
@@ -47,14 +56,14 @@ class Grid():
             _ = []
             for x in range(0, self.m_Cols+1):
                 _.append(Cell(y, x))
-            self.m_Grid.append(_)
+            self.m_Maze.append(_)
     
     def print(self):
         for y in range(0, self.m_Rows+1):
             _ = []
             for x in range(0, self.m_Cols+1):
-                _.append(self.m_Grid[y][x].getElement())
-            print(str(y) + "".join(_))
+                _.append(self.m_Maze[y][x].getElement())
+            print("".join(_))
         print("\n")
     
     def make_image(self):
@@ -66,9 +75,9 @@ class Grid():
 
         for y in range(0, self.m_Rows+1):
             for x in range(0, self.m_Cols+1):
-                if self.m_Grid[y][x].getElement() == '#':
+                if self.m_Maze[y][x].getElement() == '#':
                     pixels[y+1,x+1] = (0, 0, 0)
-                elif self.m_Grid[y][x].getElement() == ' ':
+                elif self.m_Maze[y][x].getElement() == ' ':
                     pixels[y+1, x+1] = (255, 255, 255)
 
         rotated = im.transpose(Image.ROTATE_270)
@@ -117,7 +126,7 @@ class Cell():
     ###########
     # METHODS #
     ########### 
-    def findUnvisited(self, grid):
+    def findUnvisited(self, Maze):
         # the possible directions that can be made
         dirs = [(-1, 0), (0, -1), (0, 1), (1, 0)]
         available = []
@@ -127,9 +136,9 @@ class Cell():
 
         for y2, x2 in dirs:
             # solving edge cases
-            if (y+y2 < 0 or y+y2 >= len(grid)) or (x+x2 < 0 or x+x2 >= (len(grid[0]))):
+            if (y+y2 < 0 or y+y2 >= len(Maze)) or (x+x2 < 0 or x+x2 >= (len(Maze[0]))):
                 continue
-            if not(grid[y+y2][x+x2].getVisited()):
+            if not(Maze[y+y2][x+x2].getVisited()):
 
                 available.append(((y+y2), (x+x2)))
             else:
