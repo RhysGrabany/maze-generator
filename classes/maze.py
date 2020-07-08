@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 from PIL import Image, ImageOps
-from datetime import datetime
 
 class Maze():
     ###############
@@ -12,11 +11,12 @@ class Maze():
         self.m_Rows = rows
         
         self.m_Maze = []
-        self.m_MazeImage = Image.new("RGB", (self.m_Rows+3, self.m_Cols+3), "#ffffff")
+        self.m_MazeImage = Image.new("RGB", (self.m_Rows+10, self.m_Cols+3), "#ffffff")
         self.m_Name = "MAZE_" + str(cols) + "x" + str(rows)
 
 
         self.fill()
+
     
     ##############
     # DESTRUCTOR #
@@ -52,16 +52,16 @@ class Maze():
     # METHODS #
     ###########
     def fill(self):
-        for y in range(0, self.m_Rows+1):
+        for y in range(0, self.m_Rows):
             _ = []
-            for x in range(0, self.m_Cols+1):
+            for x in range(0, self.m_Cols):
                 _.append(Cell(y, x))
             self.m_Maze.append(_)
     
     def print(self):
-        for y in range(0, self.m_Rows+1):
+        for y in range(0, self.m_Rows):
             _ = []
-            for x in range(0, self.m_Cols+1):
+            for x in range(0, self.m_Cols):
                 _.append(self.m_Maze[y][x].getElement())
             print("".join(_))
         print("\n")
@@ -70,11 +70,8 @@ class Maze():
         im = self.m_MazeImage
         pixels= im.load()
 
-        print(self.m_Rows)
-
-
-        for y in range(0, self.m_Rows+1):
-            for x in range(0, self.m_Cols+1):
+        for y in range(0, self.m_Rows):
+            for x in range(0, self.m_Cols):
                 if self.m_Maze[y][x].getElement() == '#':
                     pixels[y+1,x+1] = (0, 0, 0)
                 elif self.m_Maze[y][x].getElement() == ' ':
@@ -86,6 +83,16 @@ class Maze():
     
     def save_image(self, path):
         self.m_MazeImage.save(path)
+    
+    def save_text(self, path):
+        saving = self.m_Maze
+        
+        with open(path, "w") as f:
+            for ele in saving:
+                for i in ele:
+                    f.write(i.getElement())
+                f.write("\n")
+        f.close()
 
 class Cell():
 
@@ -99,6 +106,7 @@ class Cell():
         self.m_Element = element
         self.m_Visited = visited
 
+
     ###########
     # SETTERS #
     ###########
@@ -111,6 +119,7 @@ class Cell():
     def setVisited(self, visited):
         self.m_Visited = visited
 
+
     ###########
     # GETTERS #
     ###########
@@ -122,6 +131,7 @@ class Cell():
         return self.m_Element
     def getVisited(self):
         return self.m_Visited
+
 
     ###########
     # METHODS #

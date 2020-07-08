@@ -33,5 +33,9 @@ def messages(option):
         message = '''
         Please choose a maze to view:
         '''
+    elif option == "save_maze":
+        message = '''
+        Select a maze to save:
+        '''
 
     return message

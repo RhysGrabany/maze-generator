@@ -21,7 +21,7 @@ class Maze_Bank():
     def getStack(self):
         return self.m_Bank
     def __getitem__(self, key):
-        return self.m_Bank[key]
+        return self.m_Bank[int(len(self.m_Bank)-key)]
 
 
     ###########
@@ -34,6 +34,9 @@ class Maze_Bank():
         #num_of_mazes = len([x for x in self.m_Bank if x is not None])
         del self.m_Bank[0]
         self.m_Bank.append(key)
+
+    def __len__(self):
+        return len([x for x in self.m_Bank if x is not None])
 
 
     def print(self):

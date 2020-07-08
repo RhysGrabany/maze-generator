@@ -60,8 +60,19 @@ def mm_maze_create(size):
 
 
 def view_mazes():
-    print(messages("choose_maze"))
+    print(messages("save_maze"))
     bank.print()
+    mz = input("Select: ")
+
+    he = len(bank[int(mz)])
+    wi = len(bank[int(mz)][0])
+
+    print(str(wi) + "x" + str(he))
+    bank[int(mz)].make_image()
+    bank[int(mz)].save_image("text.png")
+    bank[int(mz)].save_text("test.txt")
+    
+
 
     
     

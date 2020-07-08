@@ -80,11 +80,9 @@ def create(maze):
             nextC.setElement(' ')
             nextC.setVisited(True)
 
-            if y is (len(maze)-1):
+            if y == (len(maze)-1):
                 settingTrueSecRun(maze)
             
             settingWalls(maze, curr, nextC)
-            
-
 
             stack.append(nextC)
