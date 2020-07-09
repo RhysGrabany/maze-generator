@@ -11,9 +11,13 @@ class Maze():
         self.m_Rows = rows
         
         self.m_Maze = []
-        self.m_MazeImage = Image.new("RGB", (self.m_Rows+10, self.m_Cols+3), "#ffffff")
-        self.m_Name = "MAZE_" + str(cols) + "x" + str(rows)
+        self.m_MazeImage = []
+        self.m_MazeEnhancedImage = []
+        #self.m_MazeImage = Image.new("RGB", (self.m_Rows+2, self.m_Cols+2), "#ffffff")
+        #self.m_MazeEnhancedImage = Image.new("RGB", ((self.m_Rows*2)+2, (self.m_Cols*2)+2), "#ffffff")
 
+        self.m_Name = "MAZE_" + str(cols) + "x" + str(rows)
+        self.m_EName = "MAZE_" + str(cols*2) + "x" + str(rows*2)
 
         self.fill()
 
@@ -67,7 +71,7 @@ class Maze():
         print("\n")
     
     def make_image(self):
-        im = self.m_MazeImage
+        im = Image.new("RGB", (self.m_Rows+2, self.m_Cols+2), "#ffffff")
         pixels= im.load()
 
         for y in range(0, self.m_Rows):
@@ -81,9 +85,40 @@ class Maze():
         flip = ImageOps.mirror(rotated)
         self.m_MazeImage = flip
     
-    def save_image(self, path):
-        self.m_MazeImage.save(path)
+    def save_image(self):
+        self.m_MazeImage.save(self.m_Name + ".png")
+        self.m_MazeEnhancedImage.save(self.m_EName + ".png")
     
+
+    def setting_increase(self, pixels, y, x, color):
+
+        pixels[y, x] = color
+        pixels[y, x+1] = color
+        pixels[y+1, x] = color
+        pixels[y+1, x+1] = color
+
+    def increase_image_size(self):
+
+        im = Image.new("RGB", ((self.m_Rows*2)+2, (self.m_Cols*2)+2), "#ffffff")
+        pixels = im.load()
+
+        for y in range(0, self.m_Rows):
+            for x in range(0, self.m_Cols):
+                offset_y = (y+1)+y
+                offset_x = (x+1)+x
+
+                t_ele = self.m_Maze[y][x].getElement()
+
+                if t_ele is "#":
+                    self.setting_increase(pixels, offset_y, offset_x, (0, 0, 0))
+                elif t_ele is " ":
+                    self.setting_increase(pixels, offset_y, offset_x, (255, 255, 255))
+        
+        rotated = im.transpose(Image.ROTATE_270)
+        flip = ImageOps.mirror(rotated)
+        self.m_MazeEnhancedImage = flip
+
+
     def save_text(self, path):
         saving = self.m_Maze
         

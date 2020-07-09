@@ -3,7 +3,8 @@ import sys, os
 from classes.maze import Maze
 from classes.maze_bank import Maze_Bank
 from generator.rec_back import create
-from messages_protoype import messages
+
+from .messages_protoype import messages
 
 bank = Maze_Bank()
 
@@ -69,7 +70,8 @@ def view_mazes():
 
     print(str(wi) + "x" + str(he))
     bank[int(mz)].make_image()
-    bank[int(mz)].save_image("text.png")
+    bank[int(mz)].increase_image_size()
+    bank[int(mz)].save_image()
     bank[int(mz)].save_text("test.txt")
     
 
