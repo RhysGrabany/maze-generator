@@ -68,9 +68,8 @@ def view_mazes():
     he = len(bank[int(mz)])
     wi = len(bank[int(mz)][0])
 
-    print(str(wi) + "x" + str(he))
     bank[int(mz)].make_image()
-    bank[int(mz)].increase_image_size()
+    bank[int(mz)].increase_image_size(10)
     bank[int(mz)].save_image()
     bank[int(mz)].save_text("test.txt")
     

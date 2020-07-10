@@ -13,11 +13,9 @@ class Maze():
         self.m_Maze = []
         self.m_MazeImage = []
         self.m_MazeEnhancedImage = []
-        #self.m_MazeImage = Image.new("RGB", (self.m_Rows+2, self.m_Cols+2), "#ffffff")
-        #self.m_MazeEnhancedImage = Image.new("RGB", ((self.m_Rows*2)+2, (self.m_Cols*2)+2), "#ffffff")
-
+        
         self.m_Name = "MAZE_" + str(cols) + "x" + str(rows)
-        self.m_EName = "MAZE_" + str(cols*2) + "x" + str(rows*2)
+        self.m_EName = ""
 
         self.fill()
 
@@ -90,33 +88,50 @@ class Maze():
         self.m_MazeEnhancedImage.save(self.m_EName + ".png")
     
 
-    def setting_increase(self, pixels, y, x, color):
+    # 
+    def setting_increase(self, pixels, y, x, color, magnitude):
 
         pixels[y, x] = color
-        pixels[y, x+1] = color
-        pixels[y+1, x] = color
-        pixels[y+1, x+1] = color
+        for m in range(0, magnitude):
+            for mp in range(0, magnitude):
+                # paints the pixel left to right one row at a time
+                pixels[y+m, x+mp] = color
 
-    def increase_image_size(self):
-
-        im = Image.new("RGB", ((self.m_Rows*2)+2, (self.m_Cols*2)+2), "#ffffff")
+    # this increases the size of the image to each pixel and doubles it
+    # TODO: increase size based on magnitude rather than just double
+    def increase_image_size(self, m):
+        
+        new_rows = self.m_Rows*m
+        new_cols = self.m_Cols*m
+        im = Image.new("RGB", (new_rows+10, new_cols+10), "#ffffff")
         pixels = im.load()
 
-        for y in range(0, self.m_Rows):
-            for x in range(0, self.m_Cols):
-                offset_y = (y+1)+y
-                offset_x = (x+1)+x
+        maze = self.m_Maze
+
+        wall_color = (0, 0, 0)
+        path_color = (255, 255, 255)
+
+        for y in range(0, len(maze)):
+            for x in range(0, len(maze[y])):
+                
+                # this offset is where the pixels start and then will continue from where the last calulation will be
+                # so if 1x at (0,0) is # and with magnitude 5x - 0,0 until (0,4) will be #####
+                # and then the next pixel to the right (0,1) will start at (0,5) and will continue 
+                offset_y = y*m+5
+                offset_x = x*m+5
 
                 t_ele = self.m_Maze[y][x].getElement()
 
                 if t_ele is "#":
-                    self.setting_increase(pixels, offset_y, offset_x, (0, 0, 0))
+                    self.setting_increase(pixels, offset_y, offset_x, wall_color, m)
                 elif t_ele is " ":
-                    self.setting_increase(pixels, offset_y, offset_x, (255, 255, 255))
+                    self.setting_increase(pixels, offset_y, offset_x, path_color, m)
         
         rotated = im.transpose(Image.ROTATE_270)
         flip = ImageOps.mirror(rotated)
         self.m_MazeEnhancedImage = flip
+
+        self.m_EName = "MAZE_" +  str(new_cols) + "x" + str(new_rows)
 
 
     def save_text(self, path):
