@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from PIL import Image, ImageOps
+import os
 
 class Maze():
     ###############
@@ -69,7 +70,9 @@ class Maze():
         print("\n")
     
     def make_image(self):
-        im = Image.new("RGB", (self.m_Rows+2, self.m_Cols+2), "#ffffff")
+        rows = self.m_Rows
+        cols = self.m_Cols
+        im = Image.new("RGB", (rows+2, cols+2), "#ffffff")
         pixels= im.load()
 
         for y in range(0, self.m_Rows):
@@ -83,10 +86,20 @@ class Maze():
         flip = ImageOps.mirror(rotated)
         self.m_MazeImage = flip
     
-    def save_image(self):
-        self.m_MazeImage.save(self.m_Name + ".png")
-        self.m_MazeEnhancedImage.save(self.m_EName + ".png")
+    def save_image(self, type):
+        cwd = os.getcwd()
+        img = cwd + "/maze/images/"
+
+
+        if type is 0:
+            self.m_MazeImage.save(img + self.m_Name + ".png")
+        else:
+            self.m_MazeEnhancedImage.save(img + self.m_EName + ".png")
     
+    def save_image_enhanced(self):
+        cwd = os.getcwd()
+        img = cwd + "/maze/images/"
+        self.m_MazeEnhancedImage.save(img + self.m_EName + ".png")
 
     # 
     def setting_increase(self, pixels, y, x, color, magnitude):
@@ -95,10 +108,10 @@ class Maze():
         for m in range(0, magnitude):
             for mp in range(0, magnitude):
                 # paints the pixel left to right one row at a time
+                print(m, mp)
                 pixels[y+m, x+mp] = color
 
     # this increases the size of the image to each pixel and doubles it
-    # TODO: increase size based on magnitude rather than just double
     def increase_image_size(self, m):
         
         new_rows = self.m_Rows*m
@@ -134,8 +147,11 @@ class Maze():
         self.m_EName = "MAZE_" +  str(new_cols) + "x" + str(new_rows)
 
 
-    def save_text(self, path):
+    # saving the text file to file
+    def save_text(self):
         saving = self.m_Maze
+        cwd = os.getcwd()
+        path = cwd + "/maze/text/" + self.m_Name + ".txt"
         
         with open(path, "w") as f:
             for ele in saving:
