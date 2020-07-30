@@ -8,6 +8,12 @@ class Maze():
     # CONSTRUCTOR #
     ###############
     def __init__(self, cols, rows):
+
+        if cols < 5:
+            cols = 5
+        if rows < 5:
+            rows = 5
+
         self.m_Cols = cols
         self.m_Rows = rows
         
@@ -38,6 +44,8 @@ class Maze():
         return self.m_Maze[key]
     def getMazeImage(self):
         return self.m_MazeImage
+    def getMazeEnhancedImage(self):
+        return self.m_MazeEnhancedImage
     def getName(self):
         return self.m_Name
 
